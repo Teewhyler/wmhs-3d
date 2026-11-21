@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"><head><meta name="robots" content="noindex,nofollow"><link rel="icon" href="favicon.ico">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0d2340">
+<title>West Monroe High School · 3D campus (v3 viewer)</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:#9fc0dd;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#fff;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
+#app{position:fixed;inset:0}canvas{display:block;touch-action:none;width:100%!important;height:100%!important}
+.btn{width:52px;height:52px;border-radius:50%;border:0;background:#fffffff0;color:#1d2b3a;font-size:17px;font-weight:700;box-shadow:0 2px 8px #0005;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.btn:active{transform:scale(.94)}
+#ctl{position:fixed;right:calc(12px + env(safe-area-inset-right));bottom:calc(22px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;z-index:5}
+#compass svg{width:40px;height:40px}#needle{transition:transform .05s linear;transform-origin:50% 50%}
+#peg.armed{background:#ffd23f}
+#top{position:fixed;left:calc(10px + env(safe-area-inset-left));top:calc(10px + env(safe-area-inset-top));right:calc(10px + env(safe-area-inset-right));display:flex;gap:10px;align-items:center;z-index:6;pointer-events:none}
+#top>*{pointer-events:auto}
+#menuBtn{width:auto;padding:0 18px;border-radius:26px;height:48px}
+#title{background:#0d2340d9;padding:8px 14px;border-radius:24px;font-size:14px;font-weight:700;line-height:1.2}
+#title small{display:block;font-weight:400;font-size:11px;color:#b9cde3}
+#panel{position:fixed;left:calc(10px + env(safe-area-inset-left));top:calc(68px + env(safe-area-inset-top));width:min(360px,calc(100vw - 20px));max-height:calc(100dvh - 90px - env(safe-area-inset-top));overflow:auto;background:#0d2340f2;border-radius:16px;padding:14px;z-index:6;display:none;box-shadow:0 10px 30px #0008;-webkit-overflow-scrolling:touch}
+body.menu #panel{display:block}
+.cap{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#9fb8d3;font-weight:800;margin:14px 0 8px}
+#views{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#views button,#panel select,.wide{min-height:44px;border-radius:10px;border:1px solid #47658a;background:#1c3a5e;color:#fff;font-size:14px;padding:8px}
+#panel select{width:100%}
+#panel label{display:flex;gap:10px;align-items:center;font-size:14px;min-height:40px}
+#panel input[type=checkbox]{width:22px;height:22px;accent-color:#3aa0ff}
+#panel input[type=range]{width:100%;height:36px;accent-color:#3aa0ff}
+#status{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));max-width:min(560px,calc(100vw - 150px));background:#0d2340cc;padding:8px 14px;border-radius:18px;font-size:12px;text-align:center;z-index:4;pointer-events:none}
+#status:empty{display:none}
+#fps{position:fixed;right:8px;top:calc(64px + env(safe-area-inset-top));font-size:10px;color:#fff9;z-index:3;text-shadow:0 1px 2px #000}
+#joy{position:fixed;left:calc(26px + env(safe-area-inset-left));bottom:calc(30px + env(safe-area-inset-bottom));width:132px;height:132px;border-radius:50%;background:#ffffff40;border:2px solid #ffffffa0;display:none;z-index:5;touch-action:none}
+#knob{position:absolute;left:41px;top:41px;width:50px;height:50px;border-radius:50%;background:#fffffff0;box-shadow:0 2px 6px #0006;pointer-events:none}
+#exitStreet{position:fixed;left:50%;transform:translateX(-50%);top:calc(70px + env(safe-area-inset-top));display:none;z-index:6;width:auto;padding:0 20px;border-radius:24px;height:46px}
+body.street #joy,body.street #exitStreet{display:block}body.street #exitStreet{display:flex}
+body.street #tilt2d,body.street #zin,body.street #zout{display:none}
+#filesBox{display:none}
+#photos{position:fixed;inset:auto 8px calc(8px + env(safe-area-inset-bottom)) 8px;max-height:82dvh;background:#0d2340f7;border-radius:14px;padding:10px;z-index:9;display:none;overflow:auto}
+body.photos #photos{display:block}#photos img{width:100%;max-height:60dvh;object-fit:contain;border-radius:8px}
+#photos .row{display:flex;gap:8px}#photos .row button{flex:1}
+#help{font-size:12px;color:#c4d6ea;line-height:1.5}
+@media (max-width:600px){#title small{display:none}}
+</style></head>
+<body>
+<div id="app"></div>
+<div id="top"><button class="btn" id="menuBtn">☰ Menu</button><div id="title">West Monroe High School<small>3D campus · units: meters</small></div></div>
+<div id="panel">
+ <div class="cap">Go to</div><div id="views"></div>
+ <div class="cap">Model</div><select id="setSel"></select>
+ <div id="filesBox"><div class="cap">Open GLB files</div><input type="file" id="files" accept=".glb" multiple class="wide"><div id="help">Opened the page straight from disk? Browsers block that. Pick the GLB files here instead, or run a local web server (see README).</div></div>
+ <div class="cap">Sun · time of day</div><input type="range" id="time" min="0" max="1439" step="5"><div id="help"><span id="timeLabel"></span></div>
+ <div class="cap">Quality</div>
+ <label><input type="checkbox" id="shadowCb" checked> Shadows</label>
+ <label><input type="checkbox" id="aoCb"> Ambient occlusion (SSAO)</label>
+ <select id="lodSel"><option value="desktop">Detail: full (laptop)</option><option value="mobile">Detail: phone (lighter)</option></select>
+ <div class="cap">Layers</div><div id="layers"></div>
+ <div class="cap">More</div>
+ <div style="display:flex;gap:8px"><button class="wide" id="photoBtn" style="display:none;flex:1">📷 Reference photos</button><button class="wide" id="shareBtn" style="flex:1">🔗 Copy view link</button></div>
+ <div class="cap">How to move</div>
+ <div id="help"><b>Phone:</b> drag one finger to move · pinch to zoom · twist two fingers to turn · drag two fingers up/down to tilt · double-tap to zoom in · two-finger tap to zoom out · compass = north, tap again = straight down · 🚶 then tap a spot for street level (joystick walks, drag looks).<br><b>Mouse:</b> left-drag moves · right-drag or Ctrl/Shift+drag turns and tilts · wheel zooms to the cursor · double-click flies there · WASD/arrows move, Q/E turn, R/F tilt. Street level: WASD + drag to look, Shift runs.</div>
+ <div id="fpsHolder"></div>
+</div>
+<div id="ctl">
+ <button class="btn" id="compass" title="North up (tap again: look straight down)"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="none" stroke="#c7d0da" stroke-width="2"/><g id="needle"><path d="M20 4 L25 20 L15 20Z" fill="#e53935"/><path d="M20 36 L25 20 L15 20Z" fill="#9aa5b1"/><text x="20" y="15" font-size="0" text-anchor="middle">N</text></g></svg></button>
+ <button class="btn" id="tilt2d" title="Toggle 2D / 3D tilt">2D</button>
+ <button class="btn" id="zin" title="Zoom in">＋</button>
+ <button class="btn" id="zout" title="Zoom out">－</button>
+ <button class="btn" id="peg" title="Street level">🚶</button>
+</div>
+<button class="btn" id="exitStreet">✕ Exit street level</button>
+<div id="joy"><div id="knob"></div></div>
+<div id="photos"><div class="row"><button class="wide" id="phPrev">◀</button><button class="wide" id="phGo">Go there</button><button class="wide" id="phNext">▶</button><button class="wide" id="phClose">✕</button></div><img id="phImg" alt="reference photo"><div id="phCap" id="help"></div></div>
+<div id="status">Starting…</div><div id="fps"></div>
+<script src="viewer.js"></script>
+</body></html>

@@ -1,0 +1,23 @@
+{
+ "default": "v3",
+ "sets": [
+  {
+   "name": "v3",
+   "label": "WMHS v3",
+   "desktop": [
+    "m/wmhs-v3-partA1-terrain-west.glb",
+    "m/wmhs-v3-partA2-terrain-east.glb",
+    "m/wmhs-v3-partB-roads-buildings-stadium-fields.glb",
+    "m/wmhs-v3-partC-v3details-trees-poles.glb",
+    "m/wmhs-v3-optional-parked-cars.glb"
+   ],
+   "mobile": [
+    "m/mobile/wmhs-v3-partA1-terrain-west-mobile.glb",
+    "m/mobile/wmhs-v3-partA2-terrain-east-mobile.glb",
+    "m/mobile/wmhs-v3-partB-roads-buildings-stadium-fields-mobile.glb",
+    "m/mobile/wmhs-v3-partC-v3details-trees-poles-mobile.glb",
+    "m/mobile/wmhs-v3-optional-parked-cars-mobile.glb"
+   ]
+  }
+ ]
+}
