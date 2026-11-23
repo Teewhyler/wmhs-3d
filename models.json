@@ -5,18 +5,18 @@
    "name": "v3",
    "label": "WMHS v3",
    "desktop": [
-    "m/wmhs-v3-partA1-terrain-west.glb?v=20261121fix3",
-    "m/wmhs-v3-partA2-terrain-east.glb?v=20261121fix3",
-    "m/wmhs-v3-partB-roads-buildings-stadium-fields.glb?v=20261121fix3",
-    "m/wmhs-v3-partC-v3details-trees-poles.glb?v=20261121fix3",
-    "m/wmhs-v3-optional-parked-cars.glb?v=20261121fix3"
+    "m/wmhs-v3-partA1-terrain-west.glb?v=20261121fix4",
+    "m/wmhs-v3-partA2-terrain-east.glb?v=20261121fix4",
+    "m/wmhs-v3-partB-roads-buildings-stadium-fields.glb?v=20261121fix4",
+    "m/wmhs-v3-partC-v3details-trees-poles.glb?v=20261121fix4",
+    "m/wmhs-v3-optional-parked-cars.glb?v=20261121fix4"
    ],
    "mobile": [
-    "m/mobile/wmhs-v3-partA1-terrain-west-mobile.glb?v=20261121fix3",
-    "m/mobile/wmhs-v3-partA2-terrain-east-mobile.glb?v=20261121fix3",
-    "m/mobile/wmhs-v3-partB-roads-buildings-stadium-fields-mobile.glb?v=20261121fix3",
-    "m/mobile/wmhs-v3-partC-v3details-trees-poles-mobile.glb?v=20261121fix3",
-    "m/mobile/wmhs-v3-optional-parked-cars-mobile.glb?v=20261121fix3"
+    "m/mobile/wmhs-v3-partA1-terrain-west-mobile.glb?v=20261121fix4",
+    "m/mobile/wmhs-v3-partA2-terrain-east-mobile.glb?v=20261121fix4",
+    "m/mobile/wmhs-v3-partB-roads-buildings-stadium-fields-mobile.glb?v=20261121fix4",
+    "m/mobile/wmhs-v3-partC-v3details-trees-poles-mobile.glb?v=20261121fix4",
+    "m/mobile/wmhs-v3-optional-parked-cars-mobile.glb?v=20261121fix4"
    ]
   }
  ]
